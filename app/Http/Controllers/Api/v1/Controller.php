@@ -2,19 +2,22 @@
 
 namespace App\Http\Controllers\Api\v1;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 class Controller
 {
     /**
      * success response method.
      *
-     * @param array $result
+     * @param array|LengthAwarePaginator|Model $result
      * @param string $message
      * @param int $code
      * @return JsonResponse
      */
-    public function sendResponse(array $result, string $message, int $code = 200): JsonResponse
+    public function sendResponse(array|LengthAwarePaginator|Model $result, string $message, int $code = 200): JsonResponse
     {
         $response = [
             'success' => true,

@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -13,14 +14,24 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        return $exceptions->render(function (\Throwable $e, Request $request) {
+        $exceptions->render(function (AuthenticationException $exception, Request $request) {
+            if ($request->expectsJson() || $request->is('api/*')) {
+                return response()->json([
+                    'message' => 'You are not authenticated. Please log in to continue.',
+                ], 401);
+            }
+            // Default behavior for non-JSON requests (can be customized if needed)
+            return redirect()->guest(route('login'));
+        });
+        $exceptions->render(function (\Throwable $e, Request $request) {
             if ($request->is('api/*')) {
                 return response()->json([
                     'message' => env('APP_ENV') != 'prod' ? $e->getMessage() : 'Server error',
                 ], 500);
             }
+            throw $e;
         });
     })->create();

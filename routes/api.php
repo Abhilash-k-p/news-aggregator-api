@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\v1\ArticleController;
 use App\Http\Controllers\Api\v1\Authentication\LoginController;
 use App\Http\Controllers\Api\v1\Authentication\PasswordResetController;
 use App\Http\Controllers\Api\v1\Authentication\RegisterController;
@@ -18,11 +19,18 @@ Route::prefix('v1')->group(function () {
     Route::post('/password/forgot', [PasswordResetController::class, 'sendResetLink']);
     Route::post('/password/reset', [PasswordResetController::class, 'resetPassword']);
 
-
     /**
      * Authenticated APIs
      */
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/logout', [LoginController::class, 'logout']);
+
+        /**
+         * Article APIs
+         */
+        Route::get('/articles', [ArticleController::class, 'index']);
+        Route::get('/articles/search', [ArticleController::class, 'search']);
+        Route::get('/articles/{id}', [ArticleController::class, 'show']);
+
     });
 });
