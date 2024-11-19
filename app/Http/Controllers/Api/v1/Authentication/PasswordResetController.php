@@ -19,7 +19,7 @@ class PasswordResetController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function sendResetLink(Request $request): JsonResponse
+    public function sendResetToken(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), ['email' => 'required|email|exists:users,email']);
 

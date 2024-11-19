@@ -65,7 +65,9 @@ class Article extends Model
 
     public function scopeFilterByAuthor($query, $author): void
     {
-        $query->where('author', 'like', "%{$author}%");
+        if ($author) {
+            $query->where('author', 'like', "%{$author}%");
+        }
     }
 
 

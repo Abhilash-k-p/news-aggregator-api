@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api\v1;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
 
 class Controller
 {

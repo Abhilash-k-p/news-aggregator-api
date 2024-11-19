@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class ArticleController extends Controller
 {
@@ -36,7 +37,7 @@ class ArticleController extends Controller
      */
     public function search(Request $request): JsonResponse
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'keyword' => 'nullable|string|max:255',
             'date' => 'nullable|date',
             'category' => 'nullable|string|max:255',
@@ -44,13 +45,17 @@ class ArticleController extends Controller
             'author' => 'nullable|string|max:255',
         ]);
 
+        if ($validator->fails()) {
+            return $this->sendError($validator->errors()->first(), $validator->errors()->all(), 422);
+        }
+
         $articles = Article::query()
             ->with(['category', 'source']) // Eager load relationships
-            ->filterByKeyword($validated['keyword'] ?? null)
-            ->filterByPublishedDate($validated['date'] ?? null)
-            ->filterByAuthor($validated['author'] ?? null)
-            ->filterByCategoryName($validated['category'] ?? null)
-            ->filterBySourceName($validated['source'] ?? null)
+            ->filterByKeyword($request->keyword ?? null)
+            ->filterByPublishedDate($request->date ?? null)
+            ->filterByAuthor($request->author ?? null)
+            ->filterByCategoryName($request->category ?? null)
+            ->filterBySourceName($request->source ?? null)
             ->paginate(10); // Paginate the results
 
         return $this->sendResponse($articles, 'Articles fetched successfully');
