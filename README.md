@@ -83,3 +83,13 @@ Schedule::command('app:fetch-articles-command')->hourly();
 Here is the complete post man collection of the APIs
 https://drive.google.com/file/d/15W_l_P0mGEvBhJNXDvUVzgGbrz49BTVP/view?usp=sharing
 
+### 5.  Run test
+I have created good amount of tests. To execute tests run following command inside docker shell
+```bash
+php artisan test
+```
+Alternatively you can use 
+```bash
+./vendor/bin/sail artisan test
+```
+outside docker shell
