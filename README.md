@@ -77,7 +77,6 @@ I have added it in scheduler, to run hourly
 
 ```php
 // console.php file
-// fetc[News_aggregator_collection.postman_collection.json](../../Downloads/News_aggregator_collection.postman_collection.json)h articles hourly
 Schedule::command('app:fetch-articles-command')->hourly();
 ```
 Here is the complete post man collection of the APIs
